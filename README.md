@@ -1,12 +1,13 @@
-# Cluster Swarm Load Balancer com NGINX
+# Configuração do Cluster Docker Swarm com Load Balancer NGINX
 
-## Configurar o cluster Docker Swarm
+## Configurando o Cluster Docker Swarm
 
 Primeiro, é necessário configurar o cluster Swarm para dois dos três nós. Para fazer isso, execute o seguinte comando para iniciar o cluster Swarm:
 
 ```
 sudo docker swarm init --advertise-addr ip-master
 ```
+
 Você obterá a seguinte saída:
 
 ```
@@ -21,7 +22,7 @@ To add a manager to this swarm, run 'docker swarm join-token manager' and follow
 
 ## Adicionar o Node Worker ao cluster Docker Swarm
 
-Em seguida, é necessário adicionar o Node Worker ao cluster Swarm. Execute o seguinte comando:
+Para adicionar um Node Worker ao cluster Swarm, execute o seguinte comando:
 
 ```
 sudo docker swarm join --token SWMTKN-1-1bu8smhaerewus9mn3m821zxqvtnd8mq82m9ppnv83wxijvhnk-0yuk9yx31ch7nhll6s1z6khyo ip-master:2377
@@ -40,6 +41,7 @@ ID                            HOSTNAME   STATUS    AVAILABILITY   MANAGER STATUS
 4uozaria1motuuuz66n9jeeys *   master     Ready     Active         Leader           25.0.3
 vjlhqtrcc814gspukhzcsas8k     node01     Ready     Active                          25.0.3
 ```
+
 ## Implantar o Serviço Nginx ao Cluster Docker Swarm
 
 Em seguida, implante o serviço Nginx no Node Master e escale-o entre os dois nós. Vá para o Node Master e execute o seguinte comando para criar um serviço Nginx:
@@ -117,4 +119,6 @@ overall progress: 1 out of 1 tasks
 verify: Service converged 
 ```
 
-Este comando criará um contêiner Nginx e permitirá conexões com os serviços web hospedados pelo seu Docker Swarm. Em seguida, abra seu navegador e verifique o Load Balancing usando a URL http://ip-load-balancer. Você deverá ver a página do Nginx.
+Este comando criará um contêiner Nginx e permitirá conexões com os serviços web hospedados pelo seu Docker Swarm.
+
+Agora, abra seu navegador e verifique o Load Balancing utilizando a URL http://ip-loadbalancer. Você deverá visualizar a página do Nginx.
