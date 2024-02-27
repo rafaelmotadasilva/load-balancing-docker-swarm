@@ -1,24 +1,32 @@
 # Configuração do Cluster Docker Swarm com Load Balancer NGINX
 
+O Docker Swarm, junto com um balanceador de carga NGINX, oferece uma solução poderosa para gerenciar aplicativos em contêineres em ambientes distribuídos. Este guia apresenta as etapas para configurar e implantar um cluster Docker Swarm, além de configurar um balanceador de carga NGINX para distribuir o tráfego entre os nós do cluster.
+
+## Visão Geral
+
+Este guia aborda o processo de configuração de um cluster Docker Swarm com um balanceador de carga NGINX. Essa configuração permite distribuir o tráfego entre os nós do cluster, melhorando a disponibilidade e a escalabilidade de aplicativos hospedados no Docker Swarm.
+
+## Requisitos
+
+Antes de começar, é necessário ter acesso a três nós: um para servir como nó mestre (master) e dois como nós de trabalho (workers). Certifique-se de que os nós estão configurados corretamente e têm o Docker instalado.
+
+## Instruções
+
+1. [Configurando o Cluster Docker Swarm](#configurando-o-cluster-docker-swarm)
+2. [Adicionar o Node Worker ao cluster Docker Swarm](#adicionar-o-node-worker-ao-cluster-docker-swarm)
+3. [Implantar o Serviço Nginx ao Cluster Docker Swarm](#implantar-o-serviço-nginx-ao-cluster-docker-swarm)
+4. [Configurar o Load Balancer](#configurar-o-load-balancer)
+5. [Conclusão](#conclusão)
+
 ## Configurando o Cluster Docker Swarm
 
-Primeiro, é necessário configurar o cluster Swarm para dois dos três nós. Para fazer isso, execute o seguinte comando para iniciar o cluster Swarm:
+Para iniciar, é necessário configurar o cluster Swarm em dois dos três nós. Execute o comando a seguir para iniciar o cluster Swarm:
 
 ```
 sudo docker swarm init --advertise-addr ip-master
 ```
 
-Você obterá a seguinte saída:
-
-```
-Swarm initialized: current node (4uozaria1motuuuz66n9jeeys) is now a manager.
-
-To add a worker to this swarm, run the following command:
-
-    docker swarm join --token SWMTKN-1-1bu8smhaerewus9mn3m821zxqvtnd8mq82m9ppnv83wxijvhnk-0yuk9yx31ch7nhll6s1z6khyo ip-master:2377
-
-To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
-```
+Isso resultará em uma saída informando como adicionar nós ao cluster.
 
 ## Adicionar o Node Worker ao cluster Docker Swarm
 
@@ -44,25 +52,27 @@ vjlhqtrcc814gspukhzcsas8k     node01     Ready     Active                       
 
 ## Implantar o Serviço Nginx ao Cluster Docker Swarm
 
-Em seguida, implante o serviço Nginx no Node Master e escale-o entre os dois nós. Vá para o Node Master e execute o seguinte comando para criar um serviço Nginx:
+Em seguida, implante o serviço Nginx no Node Master e escale-o entre os dois nós. Execute o seguinte comando para criar um serviço Nginx:
 
 ```
 sudo docker service create --name backend --replicas 2 --publish 8080:80 nginx
 ```
+
 Você deverá ver a seguinte saída:
 
-```
-b9mvrug6d7qz3q3r1tl585adz
+```b9mvrug6d7qz3q3r1tl585adz
 overall progress: 2 out of 2 tasks 
 1/2: running   [==================================================>] 
 2/2: running   [==================================================>] 
 verify: Service converged
 ```
+
 Em seguida, verifique seu serviço Nginx usando o seguinte comando:
 
 ```
 sudo docker service ls
 ```
+
 Você deve obter algo assim:
 
 ```
@@ -122,3 +132,20 @@ verify: Service converged
 Este comando criará um contêiner Nginx e permitirá conexões com os serviços web hospedados pelo seu Docker Swarm.
 
 Agora, abra seu navegador e verifique o Load Balancing utilizando a URL http://ip-loadbalancer. Você deverá visualizar a página do Nginx.
+
+## Conclusão
+
+Parabéns! Você montou seu cluster Docker Swarm com um balanceador de carga NGINX. Agora, seu sistema está pronto para lidar com o tráfego de forma eficiente entre os nós do cluster.
+
+## Contribuição
+
+Se você tiver sugestões de melhorias ou correções para este guia, sinta-se à vontade para enviar uma pull request.
+
+## Referências
+
+- [Cloud Infrastructure Services - How to setup Docker Swarm load balancing using NGINX on Ubuntu 20.04](https://cloudinfrastructureservices.co.uk/how-to-setup-docker-swarm-load-balancing-using-nginx-on-ubuntu-20-04/)
+- [UpCloud - Load balancing Docker Swarm mode](https://upcloud.com/resources/tutorials/load-balancing-docker-swarm-mode)
+
+## Licença
+
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
