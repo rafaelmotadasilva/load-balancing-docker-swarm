@@ -2,7 +2,7 @@
 
 ## Configurar o cluster Docker Swarm
 
-Primeiro, você precisará configurar o cluster Swarm para dois dos três nós. Para fazer isso, execute o seguinte comando para iniciar o cluster Swarm.
+Primeiro, é necessário configurar o cluster Swarm para dois dos três nós. Para fazer isso, execute o seguinte comando para iniciar o cluster Swarm:
 
 ```
 sudo docker swarm init --advertise-addr ip-master
@@ -18,18 +18,21 @@ To add a worker to this swarm, run the following command:
 
 To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
 ```
+
 ## Adicionar o Node Worker ao cluster Docker Swarm
 
-Em seguida, você precisará adicionar o Node Worker ao cluster Swarm. Para isso, execute o seguinte comando:
+Em seguida, é necessário adicionar o Node Worker ao cluster Swarm. Execute o seguinte comando:
 
 ```
 sudo docker swarm join --token SWMTKN-1-1bu8smhaerewus9mn3m821zxqvtnd8mq82m9ppnv83wxijvhnk-0yuk9yx31ch7nhll6s1z6khyo ip-master:2377
 ```
-Depois que o Node Worker for adicionado ao cluster Swarm, através do Node Master você poderá verificá-lo com o seguinte comando:
+
+Após adicionar o Node Worker ao cluster Swarm, você pode verificá-lo com o seguinte comando no Node Master:
 
 ```
 sudo docker node ls
 ```
+
 Você deve obter algo assim:
 
 ```
@@ -37,9 +40,9 @@ ID                            HOSTNAME   STATUS    AVAILABILITY   MANAGER STATUS
 4uozaria1motuuuz66n9jeeys *   master     Ready     Active         Leader           25.0.3
 vjlhqtrcc814gspukhzcsas8k     node01     Ready     Active                          25.0.3
 ```
-## Implantar o serviço Nginx ao cluster Docker Swarm
+## Implantar o Serviço Nginx ao Cluster Docker Swarm
 
-Em seguida, você precisará implantar o serviço Nginx no Node Master e escalá-lo entre os dois nós. Vá para o Node Master e execute o seguinte comando para criar um serviço Nginx:
+Em seguida, implante o serviço Nginx no Node Master e escale-o entre os dois nós. Vá para o Node Master e execute o seguinte comando para criar um serviço Nginx:
 
 ```
 sudo docker service create --name backend --replicas 2 --publish 8080:80 nginx
@@ -64,9 +67,10 @@ Você deve obter algo assim:
 ID             NAME      MODE         REPLICAS   IMAGE          PORTS
 b9mvrug6d7qz   backend   replicated   2/2        nginx:latest   *:8080->80/tcp
 ```
+
 ## Configurar o Load Balancer
 
-Para configurar o Load Balancer, você precisará inicializar um único cluster Swarm no Node do Load Balancer. Inicialize o novo Swarm com o seguinte comando:
+Para configurar o Load Balancer, inicialize um novo cluster Swarm no Node do Load Balancer com o seguinte comando:
 
 ```
 sudo docker swarm init --advertise-addr ip-load-balancer
@@ -76,11 +80,13 @@ Em seguida, crie o diretório para o Load Balancer com o seguinte comando:
 ```
 sudo mkdir -p /data/loadbalancer
 ```
-Em seguida, crie um arquivo de configuração com o seguinte comando:
+
+Crie um arquivo de configuração com o seguinte comando:
 
 ```
 vim /data/loadbalancer/default.conf
 ```
+
 Adicione as seguintes configurações:
 
 ```
@@ -95,11 +101,13 @@ upstream backend {
    server ip-node01:8080;
 }
 ```
+
 Salve e feche o arquivo, crie o contêiner do Load Balancer e publique-o na porta 80.
 
 ```
 sudo docker service create --name loadbalancer --mount type=bind,source=/data/loadbalancer,target=/etc/nginx/conf.d --publish 80:80 nginx
 ```
+
 Você deverá ver a seguinte saída:
 
 ```
@@ -108,5 +116,5 @@ overall progress: 1 out of 1 tasks
 1/1: running   [==================================================>] 
 verify: Service converged 
 ```
-O comando acima criará um contêiner Nginx e permitirá conexões com os serviços web hospedados pelo seu Docker Swarm.
-Em seguida, abra seu navegador e verifique o Load Balancing usando a URL http://ip-loadbalancer. Você deverá ver a página do Nginx.
+
+Este comando criará um contêiner Nginx e permitirá conexões com os serviços web hospedados pelo seu Docker Swarm. Em seguida, abra seu navegador e verifique o Load Balancing usando a URL http://ip-load-balancer. Você deverá ver a página do Nginx.
