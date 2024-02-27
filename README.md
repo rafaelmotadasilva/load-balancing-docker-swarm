@@ -8,7 +8,7 @@ Este guia aborda o processo de configuração de um cluster Docker Swarm com um 
 
 ## Requisitos
 
-"Antes de iniciar, é fundamental ter acesso a três nós: um para atuar como nó mestre (master) e dois para servir como nós de trabalho (workers). Certifique-se de que esses nós estejam configurados corretamente e tenham o Docker instalado."
+Antes de começar, é necessário ter acesso a três nós: um para servir como nó mestre (master) e dois como nós de trabalho (workers). Certifique-se de que os nós estão configurados corretamente e têm o Docker instalado.
 
 ## Instruções
 
