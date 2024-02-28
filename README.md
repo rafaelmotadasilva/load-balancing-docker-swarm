@@ -23,17 +23,27 @@ Antes de iniciar, é fundamental ter acesso a três nós: um para atuar como nó
 Para iniciar, é necessário configurar o cluster Swarm em dois dos três nós. Execute o comando a seguir para iniciar o cluster Swarm:
 
 ```
-sudo docker swarm init --advertise-addr ip-master
+sudo docker swarm init --advertise-addr <IP-master>
 ```
 
-Isso resultará em uma saída informando como adicionar nós ao cluster.
+Isso resultará em uma saída informando como adicionar nós ao cluster:
+
+```
+Swarm initialized: current node (4uozaria1motuuuz66n9jeeys) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-1bu8smhaerewus9mn3m821zxqvtnd8mq82m9ppnv83wxijvhnk-0yuk9yx31ch7nhll6s1z6khyo <IP-master>:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+```
 
 ## Adicionar o Node Worker ao cluster Docker Swarm
 
 Para adicionar um Node Worker ao cluster Swarm, execute o seguinte comando:
 
 ```
-sudo docker swarm join --token SWMTKN-1-1bu8smhaerewus9mn3m821zxqvtnd8mq82m9ppnv83wxijvhnk-0yuk9yx31ch7nhll6s1z6khyo ip-master:2377
+sudo docker swarm join --token SWMTKN-1-1bu8smhaerewus9mn3m821zxqvtnd8mq82m9ppnv83wxijvhnk-0yuk9yx31ch7nhll6s1z6khyo <IP-master>:2377
 ```
 
 Após adicionar o Node Worker ao cluster Swarm, você pode verificá-lo com o seguinte comando no Node Master:
@@ -85,7 +95,7 @@ b9mvrug6d7qz   backend   replicated   2/2        nginx:latest   *:8080->80/tcp
 Para configurar o Load Balancer, inicialize um novo cluster Swarm no Node do Load Balancer com o seguinte comando:
 
 ```
-sudo docker swarm init --advertise-addr ip-load-balancer
+sudo docker swarm init --advertise-addr <IP-load-balancer>
 ```
 Em seguida, crie o diretório para o Load Balancer com o seguinte comando:
 
